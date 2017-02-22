@@ -3,7 +3,9 @@
 	//importa a classe DB
 	use Illuminate\Support\Facades\DB;
 	use Request;
+	use estoque\Http\Requests\ProdutosRequest;
 	use estoque\Produto;
+	use estoque\Categoria;
 
 	class ProdutoController extends Controller{
 
@@ -42,10 +44,10 @@
 		}
 
 		public function novo(){
-			return view('produto.formulario');
+			return view('produto.formulario')->with('categorias', Categoria::all());
 		}
 
-		public function adiciona(){
+		public function adiciona(ProdutosRequest $request){
 			
 			/*$nome = Request::input('nome');
 			$descricao = Request::input('descricao');
@@ -54,7 +56,7 @@
 			DB::insert('insert into produtos values (null, ?, ?, ?, ?)', array($nome, $valor, $descricao, $quantidade));
 			return implode( ', ', array($nome, $descricao, $valor, $quantidade));
 			*/
-			Produto::create(Request::all());
+			Produto::create($request->all());
 			return redirect()
 				->action('ProdutoController@lista')
 				->withInput(Request::only('nome'));
